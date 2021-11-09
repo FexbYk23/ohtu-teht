@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 from project_reader import ProjectReader
 
 

@@ -23,10 +23,9 @@ def main():
 
         players.append(player)
 
-    print("Oliot:")
-
-    for player in players:
-        if player.nationality == "FIN":
-            print(player)
+    finnish_players = [x for x in players if x.nationality == "FIN"]
+    finnish_players.sort(reverse=True, key=lambda x : x.goals + x.assists)
+    for player in finnish_players:
+        print(player)
 
 main()

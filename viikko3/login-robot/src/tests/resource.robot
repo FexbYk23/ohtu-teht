@@ -10,3 +10,12 @@ Input Credentials
     Input  ${username}
     Input  ${password}
     Run Application
+
+Input New Command
+    Input  new
+
+Input New Command And Create User
+    [Arguments]  ${user}  ${pass}
+    Input New Command
+    Input Credentials  ${user}  ${pass}
+    

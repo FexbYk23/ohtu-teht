@@ -6,6 +6,12 @@ class Ostoskori:
         # ostoskori tallettaa Ostos-oliota, yhden per korissa oleva Tuote
         self.ostokset = []
 
+    def __etsi_ostos(self, etsittava : Tuote):
+        for ostos in self.ostokset:
+            if ostos.tuote == etsittava:
+                return ostos
+        return None
+
     def tavaroita_korissa(self):
         pass
         # kertoo korissa olevien tavaroiden lukumäärän
@@ -25,8 +31,10 @@ class Ostoskori:
         self.ostokset.append(Ostos(lisattava))
 
     def poista_tuote(self, poistettava: Tuote):
-        # poistaa tuotteen
-        pass
+        ostos = self.__etsi_ostos(poistettava)
+        if ostos != None:
+            self.ostokset.remove(ostos)
+
 
     def tyhjenna(self):
         pass

@@ -13,18 +13,15 @@ class Ostoskori:
         return None
 
     def tavaroita_korissa(self):
-        pass
         # kertoo korissa olevien tavaroiden lukumäärän
         # eli jos koriin lisätty 2 kpl tuotetta "maito", tulee metodin palauttaa 2 
         # samoin jos korissa on 1 kpl tuotetta "maito" ja 1 kpl tuotetta "juusto", tulee metodin palauttaa 2 
-
+        return sum(map(lambda ostos : ostos.lukumaara(), self.__ostokset))
 
 # kertoo korissa olevien ostosten yhteenlasketun hinnan
     def hinta(self):
-        summa = 0
-        for ostos in self.__ostokset:
-            summa += ostos.hinta()
-        return summa 
+        return sum(map(lambda ostos : ostos.hinta(), self.__ostokset))
+
 
     def lisaa_tuote(self, lisattava: Tuote):
         ostos = self.__etsi_ostos(lisattava)

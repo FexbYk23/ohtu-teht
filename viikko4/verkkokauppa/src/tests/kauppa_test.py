@@ -9,6 +9,7 @@ class TestKauppa(unittest.TestCase):
     def setUp(self):
         self.pankki_mock = Mock()
         viitegeneraattori_mock = Mock()
+        self.viite_mock = viitegeneraattori_mock
 
         # palautetaan aina arvo 42
         viitegeneraattori_mock.uusi.return_value = 42
@@ -84,3 +85,35 @@ class TestKauppa(unittest.TestCase):
         kauppa.lisaa_koriin(2)
         kauppa.tilimaksu("pekka", "12345")
         self.pankki_mock.tilisiirto.assert_called_with("pekka", 42, ANY, ANY, 5)
+
+    def test_asioinnin_aloittaminen_alustaa_ostosten_hinnan(self):
+        kauppa = self.kauppa
+        kauppa.aloita_asiointi()
+        kauppa.lisaa_koriin(1)
+        kauppa.aloita_asiointi()
+
+        kauppa.tilimaksu("pekka", "12345")
+        self.pankki_mock.tilisiirto.assert_called_with("pekka", 42, ANY, ANY, 0)
+
+    def test_kauppa_antaa_uuden_viitenumeron_uudelle_maksulle(self):
+        kauppa = self.kauppa
+        kauppa.aloita_asiointi()
+        kauppa.lisaa_koriin(1)
+        kauppa.tilimaksu("pekka", "12345")
+        self.pankki_mock.tilisiirto.assert_called_with("pekka", 42, ANY, ANY, 5)
+        
+        self.viite_mock.uusi.return_value = 43
+        kauppa.aloita_asiointi()
+        kauppa.lisaa_koriin(1)
+        kauppa.tilimaksu("pekka", "12345")
+        self.pankki_mock.tilisiirto.assert_called_with("pekka", 43, ANY, ANY, 5)
+
+    def test_poista_korista(self):
+        kauppa = self.kauppa
+        kauppa.aloita_asiointi()
+        kauppa.lisaa_koriin(1)
+        kauppa.poista_korista(1)
+        kauppa.tilimaksu("pekka", "12345")
+        self.pankki_mock.tilisiirto.assert_called_with("pekka", 42, ANY, ANY, 0)
+
+

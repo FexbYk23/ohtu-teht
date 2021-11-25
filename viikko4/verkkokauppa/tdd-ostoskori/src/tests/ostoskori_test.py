@@ -20,4 +20,10 @@ class TestOstoskori(unittest.TestCase):
         self.kori.lisaa_tuote(t)
         self.kori.poista_tuote(t)
         self.assertEqual(self.kori.hinta(), 0)
-
+    
+    def test_saman_tuotteen_lisays(self):
+        t = Tuote("piimä", 5)
+        self.kori.lisaa_tuote(t)
+        self.kori.lisaa_tuote(t)
+        self.assertEqual(len(self.kori.ostokset()), 1)
+        self.assertEqual(self.kori.ostokset()[0].lukumaara(), 2)

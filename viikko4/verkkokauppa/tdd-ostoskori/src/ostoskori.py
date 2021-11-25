@@ -35,7 +35,7 @@ class Ostoskori:
         ostos = self.__etsi_ostos(poistettava)
         if ostos != None:
             ostos.muuta_lukumaaraa(-1)
-            if ostos.lukumaara == 0:
+            if ostos.lukumaara() == 0:
                 self.__ostokset.remove(ostos)
 
 

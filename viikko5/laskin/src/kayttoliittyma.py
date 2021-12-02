@@ -8,11 +8,40 @@ class Komento(Enum):
     NOLLAUS = 3
     KUMOA = 4
 
+class Summa:
+    def __init__(self, sovellus, lue):
+        self.sovellus = sovellus
+        self.lue = lue
+
+    def suorita(self):
+        self.sovellus.plus(self.lue())
+
+class Erotus:
+    def __init__(self, sovellus, lue):
+        self.sovellus = sovellus
+        self.lue = lue
+
+    def suorita(self):
+        self.sovellus.miinus(self.lue())
+
+class Nollaus:
+    def __init__(self, sovellus):
+        self.sovellus = sovellus
+
+    def suorita(self):
+        self.sovellus.nollaa()
+
 
 class Kayttoliittyma:
     def __init__(self, sovellus, root):
         self._sovellus = sovellus
         self._root = root
+
+        self.__komennot = {
+            Komento.SUMMA : Summa(self._sovellus, self._lue_syote),
+            Komento.EROTUS : Erotus(self._sovellus, self._lue_syote),
+            Komento.NOLLAUS : Nollaus(self._sovellus),
+        }
 
     def kaynnista(self):
         self._tulos_var = StringVar()
@@ -53,6 +82,10 @@ class Kayttoliittyma:
         erotus_painike.grid(row=2, column=1)
         self._nollaus_painike.grid(row=2, column=2)
         self._kumoa_painike.grid(row=2, column=3)
+        
+    def _lue_syote(self):
+        return int(self._syote_kentta.get())
+
 
     def _suorita_komento(self, komento):
         arvo = 0
@@ -62,14 +95,7 @@ class Kayttoliittyma:
         except Exception:
             pass
 
-        if komento == Komento.SUMMA:
-            self._sovellus.plus(arvo)
-        elif komento == Komento.EROTUS:
-            self._sovellus.miinus(arvo)
-        elif komento == Komento.NOLLAUS:
-            self._sovellus.nollaa()
-        elif komento == Komento.KUMOA:
-            pass
+        self.__komennot[komento].suorita()
 
         self._kumoa_painike["state"] = constants.NORMAL
 

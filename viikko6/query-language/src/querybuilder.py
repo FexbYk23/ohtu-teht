@@ -15,4 +15,6 @@ class QueryBuilder:
     
     def hasFewerThan(self, amount, attr):
         return QueryBuilder(matchers.And(self.matcher, matchers.HasFewerThan(amount, attr)))
-
+    
+    def oneOf(self, query1, query2):
+        return QueryBuilder(matchers.Or(query1, query2))
